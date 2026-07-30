@@ -6,6 +6,14 @@ class SysStdinEof {
         var input = Sys.stdin();
         var operation = Sys.args()[0];
 
+        if (operation == "readBytesZero") {
+            final read = input.readBytes(Bytes.alloc(0), 0, 0);
+            if (read != 0)
+                throw 'Expected a zero-length read to return 0, got $read';
+            Sys.println("zero");
+            return;
+        }
+
         try {
             switch (operation) {
                 case "readByte":

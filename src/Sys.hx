@@ -162,6 +162,8 @@ private class FileInput extends haxe.io.Input {
     }
 
     override public function readBytes( s : Bytes, pos : Int, len : Int ) : Int {
+        if (len == 0)
+            return 0;
         var buf = Buffer.hxFromBytes(s);
         var read = try {
             Fs.readSync(fd, buf, pos, len, null);

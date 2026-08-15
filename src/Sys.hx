@@ -151,27 +151,30 @@ private class FileInput extends haxe.io.Input {
 
 	override public function readByte():Int {
 		var buf = Buffer.alloc(1);
-		try {
+		var read = try {
 			Fs.readSync(fd, buf, 0, 1, null);
 		} catch (e:Dynamic) {
-			if (e.code == "EOF")
-				throw new Eof();
-			else
-				throw Error.Custom(e);
-		}
+			throw Error.Custom(e);
+		};
+		// Node reports end-of-file by returning zero bytes, not by adding an
+		// "EOF" code to a thrown error.
+		if (read == 0)
+			throw new Eof();
 		return buf[0];
 	}
 
 	override public function readBytes(s:Bytes, pos:Int, len:Int):Int {
+		if (len == 0)
+			return 0;
 		var buf = Buffer.hxFromBytes(s);
-		try {
-			return Fs.readSync(fd, buf, pos, len, null);
+		var read = try {
+			Fs.readSync(fd, buf, pos, len, null);
 		} catch (e:Dynamic) {
-			if (e.code == "EOF")
-				throw new Eof();
-			else
-				throw Error.Custom(e);
-		}
+			throw Error.Custom(e);
+		};
+		if (read == 0)
+			throw new Eof();
+		return read;
 	}
 
 	override public function close():Void {

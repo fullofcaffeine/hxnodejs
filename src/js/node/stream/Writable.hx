@@ -209,7 +209,11 @@ extern class Writable<TSelf:Writable<TSelf>> extends Stream<TSelf> implements IW
 
 		@see https://nodejs.org/api/stream.html#stream_writable_write_chunk_encoding_callback
 	**/
-	function write(chunk:Dynamic, ?encoding:String, ?callback:EitherType<Void->Void, Null<Error>->Void>):Bool;
+	function write(
+		chunk:Dynamic,
+		?encodingOrCallback:EitherType<String, EitherType<Void->Void, Null<Error>->Void>>,
+		?callback:EitherType<Void->Void, Null<Error>->Void>
+	):Bool;
 
 	// --------- API for implementing a Writable Stream -----------------------
 
@@ -385,7 +389,11 @@ extern interface IWritable extends IStream {
 
 	var writableObjectMode(default, null):Bool;
 
-	function write(chunk:Dynamic, ?encoding:String, ?callback:EitherType<Void->Void, Null<Error>->Void>):Bool;
+	function write(
+		chunk:Dynamic,
+		?encodingOrCallback:EitherType<String, EitherType<Void->Void, Null<Error>->Void>>,
+		?callback:EitherType<Void->Void, Null<Error>->Void>
+	):Bool;
 
 	var isTTY(default, null):Bool;
 }
